@@ -1,4 +1,4 @@
-//go:build amd64 || s390x
+//go:build amd64 || s390x || ppc64le
 
 /*
  * This file is part of the KubeVirt project
@@ -456,11 +456,11 @@ var _ = Describe("Node-labeller ", func() {
 
 		obsolete := nlController.clusterConfig.GetConfig().ObsoleteCPUModels
 		for key := range node.Labels {
-			if after, ok := strings.CutPrefix(key, v1.CPUModelLabel); ok {
-				obsolete[after] = true
+			if strings.HasPrefix(key, v1.CPUModelLabel) {
+				obsolete[strings.TrimPrefix(key, v1.CPUModelLabel)] = true
 			}
-			if after, ok := strings.CutPrefix(key, v1.SupportedHostModelMigrationCPU); ok {
-				obsolete[after] = true
+			if strings.HasPrefix(key, v1.SupportedHostModelMigrationCPU) {
+				obsolete[strings.TrimPrefix(key, v1.SupportedHostModelMigrationCPU)] = true
 			}
 		}
 		nlController.queue.Add(nodeName)
@@ -508,6 +508,7 @@ var _ = Describe("Node-labeller ", func() {
 	},
 		Entry("for amd64", []libvirtxml.CapsGuestMachine{{Name: "q35"}, {Name: "q35-rhel9.6.0"}}, amd64),
 		Entry("for arm64", []libvirtxml.CapsGuestMachine{{Name: "virt"}, {Name: "virt-rhel9.6.0"}}, arm64),
+		Entry("for ppc64le", []libvirtxml.CapsGuestMachine{{Name: "pseries-rhel10.0.0"}, {Name: "pseries-rhel9.6.0"}}, ppc64le),
 	)
 
 })
