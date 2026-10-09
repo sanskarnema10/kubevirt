@@ -67,5 +67,5 @@ var DefaultArchitecturePrefix = map[string]string{
 	"amd64":   "x86_",
 	"arm64":   "arm_",
 	"s390x":   "s390x_",
-	"ppc64le": "ppc64_",
+	"ppc64le": "pseries",
 }
